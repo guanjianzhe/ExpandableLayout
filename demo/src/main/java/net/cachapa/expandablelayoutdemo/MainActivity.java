@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class simpleAdapter extends FragmentPagerAdapter {
         public simpleAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
