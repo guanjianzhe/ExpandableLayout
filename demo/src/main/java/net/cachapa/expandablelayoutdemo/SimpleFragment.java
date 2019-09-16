@@ -1,9 +1,9 @@
 package net.cachapa.expandablelayoutdemo;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,12 +46,12 @@ public class SimpleFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (expandableLayout0.isExpanded()) {
-            expandableLayout0.collapse();
+            expandableLayout0.collapse(true);
         } else if (expandableLayout1.isExpanded()) {
-            expandableLayout1.collapse();
+            expandableLayout1.collapse(true);
         } else {
-            expandableLayout0.expand();
-            expandableLayout1.expand();
+            expandableLayout0.expand(true);
+            expandableLayout1.expand(true);
         }
     }
 }

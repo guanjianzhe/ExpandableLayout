@@ -1,21 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    compileSdkVersion 29
+    buildToolsVersion = '28.0.3'
 
     defaultConfig {
         applicationId "net.cachapa.expandablelayoutdemo"
         minSdkVersion 14
-        targetSdkVersion 27
-        versionCode 5
-        versionName "2.9.1"
+        targetSdkVersion 29
+        versionCode 6
+        versionName "3.0.0"
     }
 }
 
 dependencies {
-    compile project(path: ':lib')
+    implementation project(path: ':lib')
 
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.core:core-ktx:1.2.0-alpha04'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
