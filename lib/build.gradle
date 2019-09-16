@@ -1,6 +1,8 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+
 
 android {
     compileSdkVersion 29
@@ -14,6 +16,18 @@ android {
     }
 }
 
+publish {
+    userOrg = 'cachapa'
+    repoName = 'maven'
+    groupId = 'net.cachapa.expandablelayout'
+    artifactId = 'expandablelayout'
+    publishVersion = android.defaultConfig.versionName
+    autoPublish = true
+    dryRun = false
+    desc = ''
+    publications = ['maven']
+}
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.2.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -21,3 +35,6 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+// BINTRAY_KEY: https://bintray.com/profile/edit
+// ./gradlew bintrayUpload -PbintrayUser=[USERNAME] -PbintrayKey=[BINTRAY_KEY]
