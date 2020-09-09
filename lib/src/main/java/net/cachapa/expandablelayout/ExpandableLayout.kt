@@ -27,7 +27,6 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
@@ -125,10 +124,6 @@ class ExpandableLayout(context: Context, attrs: AttributeSet? = null) : FrameLay
                 }
             }
         }
-        Log.d(TAG, "this=${this.hashCode()}: \n " +
-                "size=$size, minSize=$minSize, expandableRange=$expandableRange," +
-                " expansionDelta=$expansionDelta, \n " +
-                "setTo=${(width - expansionDelta).toInt()}")
         if (orientation == HORIZONTAL) setMeasuredDimension((width - expansionDelta).toInt(), height)
         else setMeasuredDimension(width, (height - expansionDelta).toInt())
     }
