@@ -6,6 +6,7 @@
         <attr name="el_expanded" format="boolean" />
         <attr name="el_parallax" format="float" />
         <attr name="android:orientation"/>
+        <attr name="el_min_size" format="dimension" />
     </declare-styleable>
 
 </resources>

@@ -26,12 +26,22 @@ public class SimpleFragment extends Fragment implements View.OnClickListener {
 
         expandableLayout0.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
             @Override
+            public void onExpandableChange(boolean expandable) {
+
+            }
+
+            @Override
             public void onExpansionUpdate(float expansionFraction, int state) {
                 Log.d("ExpandableLayout0", "State: " + state);
             }
         });
 
         expandableLayout1.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
+            @Override
+            public void onExpandableChange(boolean expandable) {
+
+            }
+
             @Override
             public void onExpansionUpdate(float expansionFraction, int state) {
                 Log.d("ExpandableLayout1", "State: " + state);

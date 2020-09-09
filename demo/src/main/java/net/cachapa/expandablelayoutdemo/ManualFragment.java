@@ -50,4 +50,9 @@ public class ManualFragment extends Fragment implements ExpandableLayout.OnExpan
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
+
+    @Override
+    public void onExpandableChange(boolean expandable) {
+
+    }
 }

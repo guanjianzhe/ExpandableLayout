@@ -104,6 +104,11 @@ public class RecyclerViewFragment extends Fragment {
                     recyclerView.smoothScrollToPosition(getAdapterPosition());
                 }
             }
+
+            @Override
+            public void onExpandableChange(boolean expandable) {
+
+            }
         }
     }
 }

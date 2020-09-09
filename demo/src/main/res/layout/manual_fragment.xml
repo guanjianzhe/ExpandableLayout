@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:background="#00b300"
         app:el_expanded="true"
+        app:el_min_size="50dp"
         app:el_parallax="0.5">
 
         <TextView

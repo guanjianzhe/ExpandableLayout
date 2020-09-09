@@ -27,16 +27,20 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import net.cachapa.expandablelayout.util.FastOutSlowInInterpolator
+import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
+import kotlin.properties.Delegates
+import kotlin.reflect.KProperty
 
-class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class ExpandableLayout(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     interface State {
         companion object {
             const val COLLAPSED = 0
@@ -51,6 +55,12 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
     private var expansion = 0f
     private var orientation = 0
     private var state = 0
+    private var minSize = 0f
+    private var expandable by Delegates.observable(false) { property, oldValue, newValue ->
+        if (oldValue != newValue) {
+            listener?.onExpandableChange(newValue)
+        }
+    }
 
     private var interpolator: Interpolator = FastOutSlowInInterpolator
     private var animator: ValueAnimator? = null
@@ -63,6 +73,7 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
             expansion = if (atttributes.getBoolean(R.styleable.ExpandableLayout_el_expanded, false)) 1f else 0.toFloat()
             orientation = atttributes.getInt(R.styleable.ExpandableLayout_android_orientation, VERTICAL)
             parallax = atttributes.getFloat(R.styleable.ExpandableLayout_el_parallax, 1f)
+            minSize = atttributes.getDimension(R.styleable.ExpandableLayout_el_min_size, 0f)
             atttributes.recycle()
 
             state = if (expansion == 0f) State.COLLAPSED else State.EXPANDED
@@ -94,9 +105,11 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
         val height = measuredHeight
 
         val size = if (orientation == LinearLayout.HORIZONTAL) width else height
-        visibility = if (expansion == 0f && size == 0) View.GONE else View.VISIBLE
+        visibility = if (expansion == 0f && size == 0 && minSize == 0f) View.GONE else View.VISIBLE
 
-        val expansionDelta = size - round(size * expansion)
+        val expandableRange = size - minSize
+        expandable = expandableRange > 0
+        val expansionDelta = expandableRange - round(expandableRange * expansion)
         if (parallax > 0) {
             val parallaxDelta = expansionDelta * parallax
             for (i in 0 until childCount) {
@@ -112,6 +125,10 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
                 }
             }
         }
+        Log.d(TAG, "this=${this.hashCode()}: \n " +
+                "size=$size, minSize=$minSize, expandableRange=$expandableRange," +
+                " expansionDelta=$expansionDelta, \n " +
+                "setTo=${(width - expansionDelta).toInt()}")
         if (orientation == HORIZONTAL) setMeasuredDimension((width - expansionDelta).toInt(), height)
         else setMeasuredDimension(width, (height - expansionDelta).toInt())
     }
@@ -166,13 +183,13 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
             else -> {
                 when {
                     (delta < 0) -> State.COLLAPSING
-                    (delta > 0) ->  State.EXPANDING
+                    (delta > 0) -> State.EXPANDING
                     else -> State.COLLAPSED
                 }
             }
         }
 
-        visibility = if (state == State.COLLAPSED) View.GONE else View.VISIBLE
+        visibility = if (state == State.COLLAPSED && minSize == 0f) View.GONE else View.VISIBLE
         this.expansion = expansion
         requestLayout()
         listener?.onExpansionUpdate(expansion, state)
@@ -198,6 +215,7 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
 
     fun setOnExpansionUpdateListener(listener: OnExpansionUpdateListener?) {
         this.listener = listener
+        listener?.onExpandableChange(expandable)
     }
 
     private fun animateSize(targetExpansion: Int) {
@@ -210,7 +228,7 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
         animator?.interpolator = interpolator
         animator?.duration = duration.toLong()
         animator?.addUpdateListener {
-             setExpansion(it.animatedValue as Float)
+            setExpansion(it.animatedValue as Float)
         }
         animator?.addListener(ExpansionListener(targetExpansion))
         animator?.start()
@@ -224,6 +242,8 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
          * @param state             One of [State] representing the current expansion state
          */
         fun onExpansionUpdate(expansionFraction: Float, state: Int)
+
+        fun onExpandableChange(expandable: Boolean)
     }
 
     private inner class ExpansionListener(private val targetExpansion: Int) : AnimatorListener {
@@ -254,5 +274,6 @@ class ExpandableLayout (context: Context, attrs: AttributeSet? = null) : FrameLa
         const val HORIZONTAL = 0
         const val VERTICAL = 1
         private const val DEFAULT_DURATION = 300
+        const val TAG = "ExpandableLayout"
     }
 }

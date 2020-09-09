@@ -32,8 +32,13 @@ public class HorizontalFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onExpansionUpdate(float expansionFraction, int state) {
-        Log.d("ExpandableLayout", "State: " + state);
+        Log.d("HorizontalFragment", "State: " + state);
         expandButton.setRotation(expansionFraction * 180);
+    }
+
+    @Override
+    public void onExpandableChange(boolean expandable) {
+        Log.d("HorizontalFragment", "expandable: " + expandable);
     }
 
     @Override
