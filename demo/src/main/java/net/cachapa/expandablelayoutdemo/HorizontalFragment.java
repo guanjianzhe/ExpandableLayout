@@ -26,6 +26,7 @@ public class HorizontalFragment extends Fragment implements View.OnClickListener
 
         expandableLayout.setOnExpansionUpdateListener(this);
         expandButton.setOnClickListener(this);
+        expandableLayout.setFadingEdgeLength(1000);
 
         return rootView;
     }

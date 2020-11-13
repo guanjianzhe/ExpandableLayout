@@ -78,6 +78,7 @@ class ExpandableLayout(context: Context, attrs: AttributeSet? = null) : FrameLay
             state = if (expansion == 0f) State.COLLAPSED else State.EXPANDED
             setParallax(parallax)
         }
+        isHorizontalFadingEdgeEnabled = true
     }
 
     override fun onSaveInstanceState(): Parcelable {

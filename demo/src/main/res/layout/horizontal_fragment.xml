@@ -27,7 +27,7 @@
             android:background="#00f"
             android:orientation="horizontal"
             app:el_duration="800"
-            app:el_min_size="1000dp"
+            app:el_min_size="100dp"
             app:el_expanded="false"
             app:el_parallax="0.0">
 
